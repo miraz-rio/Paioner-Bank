@@ -47,8 +47,8 @@
       <div class="flex justify-center my-10 space-x-4">
         <!-- Deposit Card -->
         <div class="w-48 p-6 text-white bg-indigo-500 rounded-lg">
-          <h3 class="text-lg">Last Deposit</h3>
-          <p class="mt-2 text-4xl">$<span id="currentDeposit" class="text-5xl">00</span></p>
+          <h3 class="text-lg ">Last Deposit</h3>
+          <p class="mt-2 text-4xl">$<span id="currentDeposit" class="text-5xl ">00</span></p>
         </div>
 
         <!-- Withdraw Card -->
@@ -85,42 +85,44 @@
     </div>
 
     <script>
-      // Login event handler
-      document.getElementById("login").addEventListener("click", function () {
-        document.getElementById("login-Area").style.display = "none";
-        document.getElementById("transition-area").style.display = "block";
-      });
+  // Login button event listener
+  document.getElementById("login").addEventListener("click", function () {
+    document.getElementById("login-Area").classList.add("hidden");
+    document.getElementById("transition-area").classList.remove("hidden");
+  });
 
-      // Deposit button event handler
-      document.getElementById("Deposit").addEventListener("click", function () {
-        const depositNumber = getInputNumber("depositAmount");
-        updateSpanText("currentDeposit", depositNumber);
-        updateSpanText("currentBalance", depositNumber);
-        document.getElementById("depositAmount").value = "";
-      });
+  // Helper function to get the input value as a number
+  function getInputNumber(id) {
+    return parseFloat(document.getElementById(id).value);
+  }
 
-      // Withdraw button event handler
-      document.getElementById("Withdraw").addEventListener("click", function () {
-        const withdrawNumber = getInputNumber("withdrawAmount");
-        updateSpanText("withdrawAmountDisplay", withdrawNumber);
-        updateSpanText("currentBalance", -withdrawNumber);
-        document.getElementById("withdrawAmount").value = "";
-      });
+  // Deposit button event listener
+  document.getElementById("Deposit").addEventListener("click", function () {
+    const depositValue = getInputNumber("depositAmount");
+    const currentDeposit = parseFloat(document.getElementById("currentDeposit").innerText);
+    const currentBalance = parseFloat(document.getElementById("currentBalance").innerText);
 
-      // Helper function to get input as number
-      function getInputNumber(id) {
-        const amount = document.getElementById(id).value;
-        return parseFloat(amount);
-      }
+    if (depositValue > 0) {
+      document.getElementById("currentDeposit").innerText = (currentDeposit + depositValue);
+      document.getElementById("currentBalance").innerText = (currentBalance + depositValue);
+      document.getElementById("depositAmount").value = ""; // Clear input field
+    }
+  });
 
-      // Helper function to update text content
-      function updateSpanText(id, addedNumber) {
-        const current = document.getElementById(id).innerText;
-        const currentNumber = parseFloat(current);
-        const totalAmount = addedNumber + currentNumber;
-        document.getElementById(id).innerText = totalAmount.toFixed(2);
-      }
-    </script>
+  // Withdraw button event listener
+  document.getElementById("Withdraw").addEventListener("click", function () {
+    const withdrawValue = getInputNumber("withdrawAmount");
+    const currentWithdraw = parseFloat(document.getElementById("withdrawAmount").innerText);
+    const currentBalance = parseFloat(document.getElementById("currentBalance").innerText);
+
+    if (withdrawValue > 0 && withdrawValue <= currentBalance) {
+      document.getElementById("withdrawAmount").innerText = (currentWithdraw + withdrawValue);
+      document.getElementById("currentBalance").innerText = (currentBalance - withdrawValue);
+      document.getElementById("withdrawAmount").value = ""; // Clear input field
+    }
+  });
+</script>
+
 </body>
 
 </html>
